@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+  <div style="padding: 50px;">
+    <h1> Your database contains: </h1>
+    <ul>
+    {% for entry in data %}
+    <li> {{ entry.email }} </li>
+    {% endfor %}
+    </ul>
+  </div>
+  <a href="/populate">Add another random email</a>
+</body>
+
+</html>
