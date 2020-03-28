@@ -75,6 +75,7 @@ class Station(db.Model):
                      "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"]
 
         with open('station_list.txt', 'r') as csvfile:
+            print("Running station initializer...")
             stndata = csv.reader(csvfile, delimiter='\t')
             for row in stndata:
                 m = re.match(r"(?P<stn_wmoid>^\w+)\s+(?P<stn_lat>\S+)\s+(?P<stn_lon>\S+)\s+(?P<stn_altitude>\S+)(?P<stn_name>\D+)" , row[0])
@@ -89,6 +90,7 @@ class Station(db.Model):
                 stn_lat = float(fields['stn_lat'])
                 stn_lon = float(fields['stn_lon'])
                 stn_altitude = float(fields['stn_altitude'])
+
                 if stn_altitude != -998.8:
                     station = Station(stn_wmoid, stn_lat, stn_lon, stn_name, stn_altitude)
                     db.session.add(station)

@@ -182,11 +182,12 @@ def read_madis():
         record = db.session.query(UpdateRecord).filter_by(filename=file).first()
         if record:
             # updatetime = datetime.strptime(record.updatetime, "%Y-%m-%d %H:%M:%S")
-            if (file_timestamp != record.updatetime and (datetime.utcnow() - file_timestamp).seconds > 259200):
-                print("{} has been updated. Old mod time was {}. New mod time is {}".format(file, updatetime, file_timestamp))
+            if (file_timestamp != record.updatetime and (datetime.utcnow() - file_timestamp).total_seconds() < 173000):
                 extract_madis_data(ftp, file)
+                print("{} has been updated. Old mod time was {}. New mod time is {}".format(file, updatetime, file_timestamp))
         else:
-            if (datetime.utcnow() - file_timestamp).seconds > 259200:
+            # import code; code.interact(local=dict(globals(), **locals()))
+            if (datetime.utcnow() - file_timestamp).total_seconds() < 173000:
                 print("{} has not been downloaded before. Downloading..".format(file))
                 extract_madis_data(ftp, file)
                 new_record = UpdateRecord(updatetime=file_timestamp, filename=file)
