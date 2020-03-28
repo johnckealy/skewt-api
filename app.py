@@ -44,14 +44,12 @@ def index():
             'id': radiosonde.id,
             'Sonde validtime': radiosonde.sonde_validtime.strftime("%Y-%m-%d %H:%M:%S"),
             'Updated at': radiosonde.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
-            'Pressure': radiosonde.pressurehPA,
-            'Temperature': radiosonde.temperatureK,
             'Station Name': radiosonde.station_name,
             'latitude': radiosonde.lat,
             'longitude': radiosonde.lon,
-            'temperatureK': radiosonde.temperatureK,
-            'dewpointK': radiosonde.dewpointK,
-            'pressurehPA': radiosonde.pressurehPA,
+            'PressurehPa': radiosonde.pressurehPA,
+            'TemperatureK': radiosonde.temperatureK,
+            'DewpointK': radiosonde.dewpointK,
             'u_windMS': radiosonde.u_windMS,
             'v_windMS': radiosonde.v_windMS
     })
