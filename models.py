@@ -3,6 +3,7 @@ from datetime import datetime
 
 class Radiosonde(db.Model):
     __tablename__ = 'radiosondes'
+
     id = db.Column(db.Integer, primary_key=True)
     sonde_validtime = db.Column(db.DateTime())
     updated_at = db.Column(db.DateTime())
@@ -19,7 +20,7 @@ class Radiosonde(db.Model):
     def __init__(self, sonde_validtime=None, wmo_id=None, station_name=None, lat=None, lon=None,
                  temperatureK=None, dewpointK=None, pressurehPA=None, u_windMS=None, v_windMS=None):
         self.sonde_validtime = sonde_validtime
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
         self.wmo_id = wmo_id
         self.station_name = station_name
         self.lat = lat
@@ -31,4 +32,15 @@ class Radiosonde(db.Model):
         self.v_windMS = v_windMS
 
 
+
+class UpdateRecord(db.Model):
+    __tablename__ = 'update_times'
+
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String())
+    updatetime = db.Column(db.DateTime())
+
+    def __init__(self, filename=None, updatetime=None):
+        self.filename = filename
+        self.updatetime = updatetime.strftime("%Y-%m-%d %H:%M:%S")
 

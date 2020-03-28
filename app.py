@@ -10,7 +10,9 @@ from sqlalchemy import desc
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-if 'FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] == 'development':
+
+
+if os.uname()[1] == 'leno':
     from dotenv import load_dotenv
     load_dotenv()
     POSTGRES = {
@@ -22,7 +24,7 @@ if 'FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] == 'development':
     }
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jokea:mask9shop@localhost:5432/tephigrams-api-db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jokea:mask9shop@localhost:5432/tephigrams-api-db'
 
 
 heroku = Heroku(app)
@@ -35,24 +37,27 @@ from models import Radiosonde
 def index():
     param_wmoid = request.args.get('wmo_id')
     radiosonde = db.session.query(Radiosonde).filter_by(wmo_id=param_wmoid).order_by(desc(Radiosonde.sonde_validtime)).first()
-    print('radiosone', radiosonde.wmo_id)
 
-    return jsonify({
-        'WMO_id': radiosonde.wmo_id,
-        'id': radiosonde.id,
-        'Sonde validtime': radiosonde.sonde_validtime.strftime("%Y-%m-%d %H:%M:%S"),
-        'Updated at': radiosonde.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
-        'Pressure': radiosonde.pressurehPA,
-        'Temperature': radiosonde.temperatureK,
-        'Station Name': radiosonde.station_name,
-        'latitude': radiosonde.lat,
-        'longitude': radiosonde.lon,
-        'temperatureK': radiosonde.temperatureK,
-        'dewpointK': radiosonde.dewpointK,
-        'pressurehPA': radiosonde.pressurehPA,
-        'u_windMS': radiosonde.u_windMS,
-        'v_windMS': radiosonde.v_windMS
+    if radiosonde:
+        return jsonify({
+            'WMO_id': radiosonde.wmo_id,
+            'id': radiosonde.id,
+            'Sonde validtime': radiosonde.sonde_validtime.strftime("%Y-%m-%d %H:%M:%S"),
+            'Updated at': radiosonde.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
+            'Pressure': radiosonde.pressurehPA,
+            'Temperature': radiosonde.temperatureK,
+            'Station Name': radiosonde.station_name,
+            'latitude': radiosonde.lat,
+            'longitude': radiosonde.lon,
+            'temperatureK': radiosonde.temperatureK,
+            'dewpointK': radiosonde.dewpointK,
+            'pressurehPA': radiosonde.pressurehPA,
+            'u_windMS': radiosonde.u_windMS,
+            'v_windMS': radiosonde.v_windMS
     })
+    else:
+        return jsonify({"Error": "No Entries found"})
+
 
 
 
