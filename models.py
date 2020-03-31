@@ -1,5 +1,5 @@
 from app import db
-from datetime import datetime
+from datetime import datetime, timedelta
 import csv
 import re
 
@@ -23,7 +23,7 @@ class Radiosonde(db.Model):
     def __init__(self, sonde_validtime=None, wmo_id=None, station_name=None, lat=None, lon=None,
                  temperatureK=None, dewpointK=None, pressurehPA=None, u_windMS=None, v_windMS=None):
         self.sonde_validtime = sonde_validtime
-        self.updated_at = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        self.updated_at = datetime.utcnow()#.strftime("%Y-%m-%d %H:%M:%S")
         self.wmo_id = wmo_id
         self.station_name = station_name
         self.lat = lat
@@ -45,8 +45,13 @@ class UpdateRecord(db.Model):
 
     def __init__(self, filename=None, updatetime=None):
         self.filename = filename
-        self.updatetime = updatetime.strftime("%Y-%m-%d %H:%M:%S")
+        self.updatetime = updatetime#.strftime("%Y-%m-%d %H:%M:%S")
 
+    @classmethod
+    def delete_expired(cls, expiration_days):
+        limit = datetime.now() - timedelta(days=expiration_days)
+        cls.query.filter(cls.updatetime <= limit).delete()
+        db.session.commit()
 
 
 
@@ -82,6 +87,8 @@ class Station(db.Model):
                 fields = m.groupdict()
                 stn_wmoid = fields['stn_wmoid'][6:]
                 stn_name = fields['stn_name'].strip()
+                # import code; code.interact(local=dict(globals(), **locals()))
+
                 if re.match(r"^[a-zA-Z]{2}\s", stn_name) and  stn_name[:2] in US_STATES:
                     stn_name = stn_name[2:].strip().title() + ", " + stn_name[:2]
                 else:

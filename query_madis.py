@@ -10,7 +10,8 @@ from models import Station
 from models import Radiosonde
 from models import UpdateRecord
 from sqlalchemy import desc
-
+import warnings
+warnings.filterwarnings("ignore")
 
 
 def winds_to_UV(windSpeeds, windDirection):
@@ -112,13 +113,12 @@ def RemNaN_and_Interp(raob):
     return P_allstns, T_allstns, Td_allstns, U_allstns, V_allstns, wmo_ids_allstns, times_allstns
 
 
-
 def commit_sonde(raob):
     P, T, Td, U, V, wmo_ids, times = RemNaN_and_Interp(raob)
 
     for i,stn in enumerate(wmo_ids):
-        station = db.session.query(Station).filter_by(stn_wmoid=stn).first()
         radiosonde = db.session.query(Radiosonde).filter_by(wmo_id=stn).first()
+        station = db.session.query(Station).filter_by(stn_wmoid=stn).first()
 
         if station:
             if radiosonde:
@@ -141,8 +141,8 @@ def commit_sonde(raob):
 
 
 def extract_madis_data(ftp, file):
-    print("\n\n############################\n")
     print("Reading {}...".format(file))
+    print("\n\n############################\n")
     flo = BytesIO()
     ftp.retrbinary('RETR {}'.format(file), flo.write)
     flo.seek(0)
@@ -183,8 +183,10 @@ def read_madis():
         if record:
             # updatetime = datetime.strptime(record.updatetime, "%Y-%m-%d %H:%M:%S")
             if (file_timestamp != record.updatetime and (datetime.utcnow() - file_timestamp).total_seconds() < 173000):
+                print("{} will be updated. Old mod time was {}. New mod time is {}".format(file, record.updatetime, file_timestamp))
                 extract_madis_data(ftp, file)
-                print("{} has been updated. Old mod time was {}. New mod time is {}".format(file, updatetime, file_timestamp))
+                record.updatetime = file_timestamp
+                db.session.commit()
         else:
             # import code; code.interact(local=dict(globals(), **locals()))
             if (datetime.utcnow() - file_timestamp).total_seconds() < 173000:
@@ -192,11 +194,12 @@ def read_madis():
                 extract_madis_data(ftp, file)
                 new_record = UpdateRecord(updatetime=file_timestamp, filename=file)
                 db.session.add(new_record)
+                print("Contents of {} recorded with timestamp {}".format(file, file_timestamp))
                 db.session.commit()
     db.session.close()
 
 if __name__=='__main__':
+    UpdateRecord.delete_expired(10)
     raob = read_madis()
-
 
 
