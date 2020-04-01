@@ -40,23 +40,29 @@ def index():
 
     if radiosonde:
         return jsonify({
-            'WMO_id': radiosonde.wmo_id,
-            'id': radiosonde.id,
-            'Sonde validtime': radiosonde.sonde_validtime.strftime("%Y-%m-%d %H:%M:%S"),
-            'Updated at': radiosonde.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
-            'Station Name': radiosonde.station_name,
-            'latitude': radiosonde.lat,
-            'longitude': radiosonde.lon,
-            'PressurehPa': radiosonde.pressurehPA,
-            'TemperatureK': radiosonde.temperatureK,
-            'DewpointK': radiosonde.dewpointK,
-            'u_windMS': radiosonde.u_windMS,
-            'v_windMS': radiosonde.v_windMS
+            "wmoId": radiosonde.wmo_id,
+            "id": radiosonde.id,
+            "sondeValidtime": radiosonde.sonde_validtime.strftime("%Y-%m-%d %H:%M:%S"),
+            "updatedAt": radiosonde.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
+            "stationName": radiosonde.station_name,
+            "latitude": radiosonde.lat,
+            "longitude": radiosonde.lon,
+            "pressurehPa": radiosonde.pressurehPA,
+            "temperatureK": radiosonde.temperatureK,
+            "dewpointK": radiosonde.dewpointK,
+            "uWindMS": radiosonde.u_windMS,
+            "vWindMS": radiosonde.v_windMS
     })
     else:
         return jsonify({"Error": "No Entries found"})
 
 
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET')
+    return response
 
 
 if __name__ == '__main__':
