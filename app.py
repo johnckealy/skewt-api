@@ -60,16 +60,29 @@ def index():
 
 @app.route('/available')
 def available():
-    available_sondes = db.session.query(Radiosonde).filter(Radiosonde.sonde_validtime > datetime(2020,4,18))
-    available_sonde_wmoids = [i.wmo_id for i in available_sondes]
+    results = db.session.query(Radiosonde).filter(Radiosonde.sonde_validtime > datetime.utcnow()-timedelta(days=1))
+    # available_sonde_wmoids = [i.sonde_validtime for i in available_sondes]
+    available_sondes = []
+    if results:
+        for sonde in results:
+            sonde_obj = {
+               "wmoId": sonde.wmo_id,
+               "lat": sonde.lat,
+               "lon": sonde.lon
+            }
+            available_sondes.append(sonde_obj)
 
-    if available_sonde_wmoids:
-        return jsonify({
-            "sondeList": available_sonde_wmoids
-        })
+        return jsonify(available_sondes)
     else:
         return jsonify({"Error": "No available sondes found"})
 
+
+@app.route('/nearest')
+def nearest():
+    params = request.args.get('lat', 'lon')
+    print("\n####\n\n", params, "\n\n####")
+
+    return "03918"
 
 
 @app.after_request
