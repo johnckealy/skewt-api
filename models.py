@@ -47,7 +47,11 @@ class UpdateRecord(db.Model):
         self.filename = filename
         self.updatetime = updatetime.strftime("%Y-%m-%d %H:%M:%S")
 
-
+    @classmethod
+    def delete_expired(cls, expiration_days):
+        limit = datetime.now() - timedelta(days=expiration_days)
+        cls.query.filter(cls.updatetime <= limit).delete()
+        db.session.commit()
 
 
 class Station(db.Model):

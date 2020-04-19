@@ -52,9 +52,24 @@ def index():
             "dewpointK": radiosonde.dewpointK,
             "uWindMS": radiosonde.u_windMS,
             "vWindMS": radiosonde.v_windMS
-    })
+        })
     else:
         return jsonify({"Error": "No Entries found"})
+
+
+
+@app.route('/available')
+def available():
+    available_sondes = db.session.query(Radiosonde).filter(Radiosonde.sonde_validtime > datetime(2020,4,18))
+    available_sonde_wmoids = [i.wmo_id for i in available_sondes]
+
+    if available_sonde_wmoids:
+        return jsonify({
+            "sondeList": available_sonde_wmoids
+        })
+    else:
+        return jsonify({"Error": "No available sondes found"})
+
 
 
 @app.after_request
