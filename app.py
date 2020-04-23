@@ -31,7 +31,7 @@ heroku = Heroku(app)
 db = SQLAlchemy(app)
 
 
-from models import Radiosonde, Haversine
+from models import Radiosonde
 
 @app.route('/')
 def index():
@@ -79,16 +79,10 @@ def available():
 
 @app.route('/nearest')
 def nearest():
-    lat = request.args.get('lat')
-    lon = request.args.get('lon')
-    available = db.session.query(Radiosonde).filter(Radiosonde.sonde_validtime > datetime.utcnow()-timedelta(days=1))
+    params = request.args.get('lat', 'lon')
+    print("\n####\n\n", params, "\n\n####")
 
-
-    v = {'lat': lat, 'lon': lon}
-    nearest = Haversine.closest(available, v)
-
-    return jsonify({ "wmoId": nearest.wmo_id })
-
+    return "03918"
 
 
 @app.after_request
