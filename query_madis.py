@@ -73,11 +73,13 @@ def RemNaN_and_Interp(raob):
             for pmtm in PmTm:
                 PT.append(pmtm)
             for psts in PsTs:
-                PT.append(psts)
+                if psts[0] not in Pm:
+                    PT.append(psts)
             for pmtdm in PmTdm:
                 PTd.append(pmtdm)
             for pstds in PsTds:
-                PTd.append(pstds)
+                if psts[0] not in Pm:
+                    PTd.append(pstds)
 
 
             PT = [x for x in PT if all(i == i for i in x)]
@@ -102,9 +104,6 @@ def RemNaN_and_Interp(raob):
                 U = f(P)
                 f = interp1d(Pm, v, kind='linear', fill_value="extrapolate")
                 V = f(P)
-
-                U = U*1.94384
-                V = V*1.94384
 
                 Pqc, Tqc, Tdqc, Uqc, Vqc = basic_qc(P, T, Td, U, V)
 
