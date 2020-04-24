@@ -79,10 +79,13 @@ def available():
 
 @app.route('/nearest')
 def nearest():
-    params = request.args.get('lat', 'lon')
-    print("\n####\n\n", params, "\n\n####")
+    lat = request.args.get('lat')
+    lon = request.args.get('lon')
+    available = db.session.query(Radiosonde).filter(Radiosonde.sonde_validtime > datetime.utcnow()-timedelta(days=1))
+    v = {'lat': lat, 'lon': lon}
+    nearest = Haversine.closest(available, v)
 
-    return "03918"
+    return jsonify({ "wmoId": nearest.wmo_id })
 
 
 @app.after_request
