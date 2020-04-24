@@ -83,7 +83,6 @@ def nearest():
     lon = request.args.get('lon')
     available = db.session.query(Radiosonde).filter(Radiosonde.sonde_validtime > datetime.utcnow()-timedelta(days=1))
 
-
     v = {'lat': lat, 'lon': lon}
     nearest = Haversine.closest(available, v)
 
