@@ -31,7 +31,7 @@ heroku = Heroku(app)
 db = SQLAlchemy(app)
 
 
-from models import Radiosonde
+from models import Radiosonde, Haversine
 
 @app.route('/')
 def index():
