@@ -12,19 +12,17 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 
-if os.uname()[1] == 'leno':
-    from dotenv import load_dotenv
-    load_dotenv()
-    POSTGRES = {
-        'user': os.environ['PG_USER'],
-        'pw': os.environ['PG_PWD'],
-        'db': os.environ['PG_DATABASE'],
-        'host': 'localhost',
-        'port': '5432',
-    }
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jokea:mask9shop@localhost:5432/tephigrams-api-db'
+# if os.uname()[1] == 'leno':
+from dotenv import load_dotenv
+load_dotenv()
+POSTGRES = {
+    'user': os.environ['PG_USER'],
+    'pw': os.environ['PG_PWD'],
+    'db': os.environ['PG_DATABASE'],
+    'host': 'localhost',
+    'port': '5432',
+}
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 
 heroku = Heroku(app)
