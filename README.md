@@ -6,9 +6,7 @@ This will soon be live at api.skewt.org.
 
 You can query the radiosonde (weather balloon) data from any meteorological station if you know the station's identification number. A list of station details is included in the repository (or simple use the `available` route).
 
-#### Usage
-
-Examples: 
+#### Usage Examples 
 
 Get the station data from Castor Bay, Northern Ireland
 
