@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import random
 from datetime import datetime, timedelta
 from sqlalchemy import desc
-
+import os 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
