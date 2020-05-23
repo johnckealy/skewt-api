@@ -2,7 +2,7 @@
 
 *A Flask REST API providing data from the upper atmosphere in near-real time.*
 
-This will soon be live at api.skewt.org.
+This API is live at `api.skewt.org`.
 
 You can query the radiosonde (weather balloon) data from any meteorological station if you know the station's identification number. A list of station details is included in the repository (or simple use the `available` route).
 
