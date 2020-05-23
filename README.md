@@ -32,3 +32,7 @@ $ python
 >> from models import Station
 >> Station.initialize_stations()
 ```
+
+A cron job is required to keep the data flowing in. Run this script in the cron job.
+
+`python query_madis.py`
