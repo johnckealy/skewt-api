@@ -1,0 +1,17 @@
+name: skewtapi
+
+channels:
+  - conda-forge
+
+dependencies:
+  - flask
+  - wheel
+  - uwsgi
+  - pip
+  - pip:
+    - Flask-SQLAlchemy
+    - scipy
+    - python-dotenv
+    - Faker
+    - netCDF4
+    - psycopg2-binary

@@ -1,7 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_heroku import Heroku
-import os
 import random
 from datetime import datetime, timedelta
 from sqlalchemy import desc
@@ -12,7 +10,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 
-# if os.uname()[1] == 'leno':
 from dotenv import load_dotenv
 load_dotenv()
 POSTGRES = {
@@ -25,7 +22,6 @@ POSTGRES = {
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 
-heroku = Heroku(app)
 db = SQLAlchemy(app)
 
 
