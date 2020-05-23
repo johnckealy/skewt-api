@@ -10,7 +10,7 @@ You can query the radiosonde (weather balloon) data from any meteorological stat
 
 Get the station data from Castor Bay, Northern Ireland
 
-`https://api.skewt.org?wmo_id=0318`
+`https://api.skewt.org?wmo_id=03918`
 
 Find the ID of the closest station to (-8.542, 54.299)
 
